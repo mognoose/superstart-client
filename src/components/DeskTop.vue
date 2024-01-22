@@ -1,7 +1,6 @@
 <template>
     <div class="desktop">
-        <div class="icon" v-for="(game, index) in games" :key="index" @click="openGame()">
-            <!-- <div><img :src="game.icon ? game.icon : ~/assets/icons/default.png" :alt="game.name" /></div> -->
+        <div class="icon" v-for="(game, index) in games" :key="index" @click="$emit('openGame', game.name)">
             <div><img :src="game.icon ? game.icon : 'icons/default.png'" :alt="game.name" /></div>
             <div>{{ game.name }}</div>
         </div>
@@ -11,10 +10,13 @@
 <script>
 export default {
     props: ['games'],
+    methods: {
+
+    },
 }
 </script>
 
-<style>
+<style lang="scss">
 .desktop {
     background-color: teal;
     height: 100vh;

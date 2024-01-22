@@ -1,7 +1,7 @@
 <template>
     <div class="taskbar">
         <div class="startbutton" @click="start()">
-            <img :src="'icons/start.png'" alt="start" />
+            <img :src="'icons/superstart.png'" alt="start" />
             <div>Start</div>
         </div>
     </div>
@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .taskbar {
     box-sizing: border-box;
     padding: 10px;
@@ -34,8 +34,11 @@ export default {
         width: 80px;
 
         img {
-            height: 20px;
+            height: 25px;
             margin: 10px 0 10px 5px;
+            background: #000;
+            border-radius: 50%;
+            border: 2px solid #000;
             
         }
 
