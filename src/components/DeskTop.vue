@@ -1,6 +1,11 @@
 <template>
     <div class="desktop">
-        <div class="icon" v-for="(game, index) in games" :key="index" @click="$emit('openGame', game.name)">
+        <div
+            class="icon"
+            v-for="(game, index) in games.filter(game => favorites.includes(game.name))"
+            :key="index"
+            @click="$emit('openGame', game.name)"
+        >
             <div><img :src="game.icon ? game.icon : 'icons/default.png'" :alt="game.name" /></div>
             <div>{{ game.name }}</div>
         </div>
@@ -8,10 +13,14 @@
 </template>
 
 <script>
+import { useFavoritesStore } from '@/stores/favorites'
+
 export default {
     props: ['games'],
-    methods: {
-
+    setup() {
+        const store = useFavoritesStore()
+        const favorites = computed(() => store.favorites)
+        return { favorites }
     },
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <DeskTop
-            :games="favorites"
+            :games="games"
             @open-game="game => onOpenGame(game)"
         />
         <TaskBar
@@ -10,7 +10,6 @@
         <GameLauncher
             v-if="game"
             :game="game" @close="onCloseGame()"
-            @addToDesktop="game => onAddToDesktop(game)"
         />
         <StartMenu
             v-if="start"
@@ -22,8 +21,18 @@
 
 <script>
 import axios from 'axios';
+import { useFavoritesStore } from '@/stores/favorites'
 
 export default {
+    setup() {
+        const store = useFavoritesStore()
+        const { addFavorite } = store
+        const { removeFavorite } = store
+        const { setFavorites } = store
+        const { loadFavorites } = store
+        const favorites = computed(() => store.favorites)
+        return { addFavorite, removeFavorite, favorites, setFavorites, loadFavorites }
+    },
     data() {
         return {
             games: [],
@@ -31,14 +40,9 @@ export default {
             game: "",
         }
     },
-    computed: {
-        favorites() {
-            const favorites = JSON.parse(localStorage.getItem('favorites'));
-            return this.games.filter(game => favorites.includes(game.name))
-        }
-    },
     mounted() {
         this.getGames();
+        this.loadFavorites();
     },
     methods: {
         async getGames() {
@@ -47,18 +51,6 @@ export default {
         },
         onStart() {
             this.start = !this.start;
-        },
-        onAddToDesktop(game) {
-            let favorites = JSON.parse(localStorage.getItem('favorites'));
-            if(!favorites) favorites = []
-
-            favorites.push(game)
-
-            console.log('game', game);
-            console.log('favorites', favorites);
-            
-
-            localStorage.setItem('favorites', JSON.stringify(favorites));
         },
         onOpenGame(gameName) {
             this.start = false;

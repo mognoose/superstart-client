@@ -15,23 +15,24 @@
                 <a :href="`http://localhost:8080/download/${game.metadata.folder}/${game.files[0]}`" target="_Blank">Download</a>
             </div>
             <div>
-                <span v-if="favorite" @click="$emit('addToDesktop', game.name)">Remove from Desktop</span>
-                <span v-else @click="$emit('addToDesktop', game.name)">Add to Desktop</span>
+                <span v-if="favorites.includes(game.name)" @click="removeFavorite(game.name)">Remove from Desktop</span>
+                <span v-else @click="addFavorite(game.name)">Add to Desktop</span>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { useFavoritesStore } from '@/stores/favorites'
+
 export default {
     props: ['game'],
-    computed: {
-        favorite() {
-            const favorites = JSON.parse(localStorage.getItem('favorites'));
-            console.log('favorites launcher', favorites);
-            if(favorites.includes(this.game.name)) return true;
-            return false
-        }
+    setup() {
+        const store = useFavoritesStore()
+        const { addFavorite } = store
+        const { removeFavorite } = store
+        const favorites = computed(() => store.favorites)
+        return { addFavorite, removeFavorite, favorites }
     },
     mounted () {
         nextTick(() => {
