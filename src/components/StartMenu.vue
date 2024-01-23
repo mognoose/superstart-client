@@ -5,7 +5,10 @@
             <span>user</span>
         </div>
         <div class="gamelist">
-            <div class="menu-item" v-for="game in games" :key="game.name" @click="$emit('openGame', game.name)">
+            <div v-if="search" class="menu-item">
+                {{ search }}
+            </div>
+            <div class="menu-item" v-for="game in games.filter(game => game.name.toUpperCase().includes(search.toUpperCase()))" :key="game.name" @click="$emit('openGame', game.name)">
                 <img :src="game.icon ? game.icon : 'icons/default.png'" :alt="game.name" />
                 <span>{{ game.name }}</span>
             </div>
@@ -16,7 +19,7 @@
                 <span>{{ option.name }}</span>
             </div>
         </div>
-        <input type="text" ref="search">
+        <input type="text" ref="search" v-model="search">
     </div>
 </template>
 
@@ -25,6 +28,7 @@ export default {
     props: ['games'],
     data() {
         return {
+            search: '',
             options: [
                 { name: 'option 1', icon: "icons/default.png" },
                 { name: 'option 2', icon: "icons/default.png" },

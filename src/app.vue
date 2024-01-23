@@ -3,6 +3,7 @@
         <DeskTop
             :games="games"
             @open-game="game => onOpenGame(game)"
+            @click="closeStart()"
         />
         <TaskBar
             @start="onStart()"
@@ -10,12 +11,17 @@
         <GameLauncher
             v-if="game"
             :game="game" @close="onCloseGame()"
+            @click="closeStart()"
         />
         <StartMenu
+            ref="startmenu"
             v-if="start"
             :games="games"
             @open-game="game => onOpenGame(game)"
+            @close-start="closeStart()"
         />
+        <SearchOverlay v-if="overlay" :games="games" @open-game="game => onOpenGame(game)" />
+        <keyboard-events @keydown="keyboardEvent" />
     </div>
 </template>
 
@@ -37,6 +43,7 @@ export default {
         return {
             games: [],
             start: false,
+            overlay: false,
             game: "",
         }
     },
@@ -49,16 +56,29 @@ export default {
             const res = await axios.get('http://localhost:8080/api/games');
             this.games = res.data;
         },
+        onOverlay() {
+            this.overlay = !this.overlay;
+        },
         onStart() {
             this.start = !this.start;
         },
-        onOpenGame(gameName) {
+        closeStart() {
             this.start = false;
+            this.overlay = false;
+        },
+        onOpenGame(gameName) {
+            this.closeStart();
             const game = this.games.find(game => game.name === gameName)
             this.game = game;
         },
         onCloseGame() {
             this.game = null;
+        },
+        keyboardEvent(e) {
+            console.log('keyboard event detected: ', e.which);
+            if (e.keyCode == 75 && e.ctrlKey) this.onOverlay();
+            if(e.which === 91) this.onStart();
+            if(e.which === 27) this.closeStart();
         }
     },
 }
