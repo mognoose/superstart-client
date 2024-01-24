@@ -6,15 +6,25 @@
         </div>
         <div class="gamelist">
             <div v-if="search" class="menu-item">
-                {{ search }}
+                {{ background }}
             </div>
-            <div class="menu-item" v-for="game in games.filter(game => game.name.toUpperCase().includes(search.toUpperCase()))" :key="game.name" @click="$emit('openGame', game.name)">
+            <div
+                class="menu-item"
+                v-for="game in games.filter(game => game.name.toUpperCase().includes(search.toUpperCase()))"
+                :key="game.name"
+                @click="$emit('openGame', game.name)"
+            >
                 <img :src="game.icon ? game.icon : 'icons/default.png'" :alt="game.name" />
                 <span>{{ game.name }}</span>
             </div>
         </div>
         <div class="options">
-            <div class="menu-item" v-for="option in options" :key="option.name">
+            <div
+                class="menu-item"
+                v-for="option in options"
+                :key="option.name"
+                @click="setOption(option.name)"
+            >
                 <img :src="options.icon ? options.icon : 'icons/default.png'" :alt="options.name" />
                 <span>{{ option.name }}</span>
             </div>
@@ -24,8 +34,16 @@
 </template>
 
 <script>
+import { useCustomisationsStore } from '@/stores/customisations'
+
 export default {
     props: ['games'],
+    setup() {
+        const store = useCustomisationsStore()
+        const { setBackground, removeBackground } = store
+        const background = computed(() => store.background)
+        return { setBackground, removeBackground, background }
+    },
     data() {
         return {
             search: '',
@@ -44,6 +62,15 @@ export default {
     methods: {
         focusSearch() {
             this.$refs.search.focus();
+        },
+        setOption(option){
+            console.log(option);
+            if(option === 'option 1') {
+                this.setBackground('blue');
+            }
+            if(option === 'option 2') {
+                this.setBackground('');
+            }
         }
     }
 }
@@ -54,14 +81,12 @@ export default {
     position: absolute;
     bottom: 64px;
     left: 0;
-    background-color: gray;
     height: 60vh;
     height: 60dvh;
     width: 400px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 58px auto 2.5rem;
-    background-color: blueviolet;
 
     .user {
         display: grid;
@@ -101,14 +126,12 @@ export default {
     }
 
     .gamelist {
-        background-color: whitesmoke;
         grid-row-start: 2;
         grid-column-start: 1;
 
     }
 
     .options {
-        background-color: lightsteelblue;
         grid-row-start: 2;
         grid-column-start: 2;
     }

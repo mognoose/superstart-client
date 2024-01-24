@@ -1,0 +1,29 @@
+@import '~/assets/scss/_vars.scss';
+
+.desktop {
+    background-color: $desktop;
+}
+
+.start-menu {
+    background-color: $accent-dark;
+
+    .gamelist {
+        background-color: $light;
+    }
+
+    .options {
+        background-color: $accent-light;
+    }
+}
+
+.taskbar {
+    background-color: $main-bg;
+
+    .startbutton {
+        background-color: $main-bg;
+    }
+
+    .startbutton:hover {
+        background-color: $main-bg-darker;
+    }
+}

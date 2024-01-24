@@ -6,5 +6,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
   ],
+  css: ["@/assets/scss/global.scss"],
 
 })

@@ -24,7 +24,6 @@ export default {
     padding: 10px;
     height: 64px;
     overflow: hidden;
-    background-color: lightgray;
 
     .startbutton {
         cursor: default;
@@ -54,7 +53,6 @@ export default {
     }
     
     .startbutton:hover {
-            background-color: silver;
         }
 }
 </style>

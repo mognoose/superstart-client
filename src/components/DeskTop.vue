@@ -1,5 +1,6 @@
 <template>
-    <div class="desktop">
+    <div class="desktop" :class="{'blue': background === 'blue'}">
+        {{background}}
         <div
             class="icon"
             v-for="(game, index) in games.filter(game => favorites.includes(game.name))"
@@ -14,20 +15,28 @@
 
 <script>
 import { useFavoritesStore } from '@/stores/favorites'
+import { useCustomisationsStore } from '@/stores/customisations'
 
 export default {
     props: ['games'],
     setup() {
         const store = useFavoritesStore()
+        const customisations = useCustomisationsStore()
         const favorites = computed(() => store.favorites)
-        return { favorites }
+        const background = computed(() => customisations.background)
+        return { favorites, background}
+    },
+    computed: {
+        background() {
+            const background = ''
+            return null
+        }
     },
 }
 </script>
 
 <style lang="scss">
 .desktop {
-    background-color: teal;
     height: 100vh;
     height: calc(100dvh - 64px);
     display: flex;
@@ -58,6 +67,10 @@ export default {
             height: 32px
         }
     }
+}
+
+.blue {
+    background-color: blue;
 }
 
 </style>
